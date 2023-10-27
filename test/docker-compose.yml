@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  search_db:
+    image: mariadb:10.6.3
+    container_name: pythondb
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=True
+    env_file:
+      - .env
+    restart: on-failure
+    ports:
+      - "3301:3306"
+    volumes:
+      - db_data:/var/lib/mysql`
+    networks:
+      - separated_network
+# search_api:
+# container_name: search_api
+# build:
+# context: .
+# dockerfile: docker/web/Dockerfile
+# env_file:
+# - .env
+# entrypoint: /entrypoint.sh
+# ports:
+# - "8011:8000"
+# depends_on:
+# - search_db
+# networks:
+# - separated_network
+# search_manticore:
+# container_name: search_manticore
+# env_file:
+# - .env
+# build:
+# context: .
+# dockerfile: docker/manticore/Dockerfile
+# ports:
+# - "9301:9306"
+# restart: always
+# ulimits:
+# nproc: 65535
+# nofile:
+# soft: 65535
+# hard: 65535
+# memlock:
+# soft: -1
+# hard: -1
+# volumes:
+# - ./docker/manticore/manticore.conf:/etc/manticoresearch/manticore.conf
+# - manticore_data:/var/lib/manticore
+# networks:
+# - separated_network
+
+# search_manticore-indexer:# container_name: search_manticore-indexer# env_file:# - docker/manticore/.env# entrypoint: /index-entrypoint.sh# build:# context: .# dockerfile: docker/manticore/Dockerfile# volumes:# - manticore_conf:/etc/manticoresearch/# - manticore_data:/var/lib/manticore# depends_on:# - manticore# networks:# - separated_network-network# restart: 'no'volumes:
+volumes:
+  db_data:
+  manticore_data:
+
+networks:
+  separated_network:
